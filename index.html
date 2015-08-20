@@ -53,8 +53,8 @@
 
 <body><script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v0.min.js"></script>
-<script src="d3.geo.zoom.min.js"></script>
-<script src="topojson.min.js"></script>
+<script src="js/d3.geo.zoom.min.js"></script>
+<script src="js/topojson.min.js"></script>
 <div id="map">
   <h1>Rotate the World</h1>
 </div>
@@ -90,38 +90,38 @@ d3.selectAll("#map")
       loader.on("world." + ++id, function() { svg.selectAll("path").attr("d", path); });
     });
 
-(function() {
-  var width = 350, height = 350,
-      projection0 = orthographicProjection(width, height),
-      projection1 = orthographicProjection(width, height),
-      path0 = d3.geo.path().projection(projection0),
-      path1 = d3.geo.path().projection(projection1);
+// (function() {
+//   var width = 350, height = 350,
+//       projection0 = orthographicProjection(width, height),
+//       projection1 = orthographicProjection(width, height),
+//       path0 = d3.geo.path().projection(projection0),
+//       path1 = d3.geo.path().projection(projection1);
 
-  var comparison0 = d3.select("#comparison").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .call(drawMap, path0, true);
-  comparison0.selectAll(".foreground")
-      .call(d3.behavior.drag()
-        .origin(function() { var r = projection0.rotate(); return {x: r[0], y: -r[1]}; })
-        .on("drag", function() {
-          projection0.rotate([d3.event.x, -d3.event.y]);
-          comparison0.selectAll("path").attr("d", path0);
-        }));
+//   var comparison0 = d3.select("#comparison").append("svg")
+//       .attr("width", width)
+//       .attr("height", height)
+//       .call(drawMap, path0, true);
+//   comparison0.selectAll(".foreground")
+//       .call(d3.behavior.drag()
+//         .origin(function() { var r = projection0.rotate(); return {x: r[0], y: -r[1]}; })
+//         .on("drag", function() {
+//           projection0.rotate([d3.event.x, -d3.event.y]);
+//           comparison0.selectAll("path").attr("d", path0);
+//         }));
 
-  var comparison1 = d3.select("#comparison").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .call(drawMap, path1, true);
-  comparison1.selectAll(".foreground")
-      .call(d3.geo.zoom().projection(projection1)
-        .on("zoom", redrawComparison1));
+//   var comparison1 = d3.select("#comparison").append("svg")
+//       .attr("width", width)
+//       .attr("height", height)
+//       .call(drawMap, path1, true);
+//   comparison1.selectAll(".foreground")
+//       .call(d3.geo.zoom().projection(projection1)
+//         .on("zoom", redrawComparison1));
 
-  loader.on("world.comparison0", function() { comparison0.selectAll("path").attr("d", path0); });
-  loader.on("world.comparison1", redrawComparison1);
+//   loader.on("world.comparison0", function() { comparison0.selectAll("path").attr("d", path0); });
+//   loader.on("world.comparison1", redrawComparison1);
 
-  function redrawComparison1() { comparison1.selectAll("path").attr("d", path1); }
-})();
+//   function redrawComparison1() { comparison1.selectAll("path").attr("d", path1); }
+// })();
 
 (function() {
   var projections = [],
@@ -180,7 +180,7 @@ d3.selectAll("#map")
   }
 })();
 
-d3.json("world-110m.json", function(error, world) {
+d3.json("data/world-110m.json", function(error, world) {
   d3.selectAll("svg").insert("path", ".foreground")
       .datum(topojson.feature(world, world.objects.land))
       .attr("class", "land");
@@ -216,7 +216,7 @@ function drawMap(svg, path, mousePoint) {
             });
       });
 
-  d3.csv("cities.csv", function(error, data) {
+  d3.csv("data/cities.csv", function(error, data) {
       svg.selectAll("circle")
          .data(data)
          .enter()
